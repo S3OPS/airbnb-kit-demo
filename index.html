@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Airbnb Turnover Kit — Working Demo</title>
+<style>
+  :root { --teal:#104a44; --sand:#f3e8d0; --coral:#cd663e; }
+  * { box-sizing: border-box; }
+  body { margin:0; font-family: Georgia, 'Times New Roman', serif; background: var(--teal); color: var(--sand); }
+  header { text-align:center; padding: 28px 16px 8px; }
+  header h1 { margin:0 0 6px; font-size: 30px; letter-spacing: .5px; }
+  header p { margin:0; opacity:.85; font-size: 16px; }
+  .bar { display:flex; justify-content:center; align-items:center; gap:14px; padding:16px; position:sticky; top:0; background:var(--teal); z-index:5; }
+  button { background: var(--coral); color:#fff; border:0; border-radius:8px; padding:10px 18px; font-size:16px; cursor:pointer; font-family: inherit; }
+  button:disabled { opacity:.4; cursor:default; }
+  #counter { font-size:16px; min-width:110px; text-align:center; }
+  main { display:flex; justify-content:center; padding: 6px 12px 30px; }
+  #page { max-width: 820px; width:100%; height:auto; background:#fff; border-radius:6px; box-shadow: 0 10px 40px rgba(0,0,0,.45); }
+  footer { text-align:center; padding: 0 16px 34px; font-size:15px; opacity:.9; }
+  .thumbs { display:flex; flex-wrap:wrap; gap:8px; justify-content:center; padding: 0 16px 22px; }
+  .thumbs img { width:64px; height:auto; border-radius:4px; cursor:pointer; border:3px solid transparent; background:#fff; }
+  .thumbs img.on { border-color: var(--coral); }
+</style>
+</head>
+<body>
+<header>
+  <h1>Airbnb Turnover Kit — Working Demo</h1>
+  <p>Flip through all 14 pages of the real kit, exactly as it prints. This is a free preview — the full-resolution, ready-to-print kit is on Etsy.</p>
+</header>
+<div class="bar">
+  <button id="prev" type="button">&larr; Prev</button>
+  <span id="counter">Page 1 of 14</span>
+  <button id="next" type="button">Next &rarr;</button>
+</div>
+<main><img id="page" src="page-01.jpg" alt="Airbnb Turnover Kit page 1"></main>
+<div class="thumbs" id="thumbs"></div>
+<footer>
+  <p>Sold as an instant download by <strong>PablosMerchantStand</strong> on Etsy — search Etsy for “Airbnb Turnover Kit PablosMerchantStand”.</p>
+</footer>
+<script>
+  var TOTAL = 14, cur = 1;
+  var img = document.getElementById('page'), counter = document.getElementById('counter');
+  var prev = document.getElementById('prev'), next = document.getElementById('next');
+  var thumbs = document.getElementById('thumbs');
+  function name(n){ return 'page-' + (n < 10 ? '0' + n : n) + '.jpg'; }
+  for (var i = 1; i <= TOTAL; i++) {
+    var t = document.createElement('img');
+    t.src = name(i); t.alt = 'Page ' + i; t.dataset.n = i;
+    t.addEventListener('click', function(){ show(parseInt(this.dataset.n, 10)); });
+    thumbs.appendChild(t);
+  }
+  function show(n) {
+    cur = Math.min(TOTAL, Math.max(1, n));
+    img.src = name(cur);
+    img.alt = 'Airbnb Turnover Kit page ' + cur;
+    counter.textContent = 'Page ' + cur + ' of ' + TOTAL;
+    prev.disabled = cur === 1; next.disabled = cur === TOTAL;
+    var all = thumbs.children;
+    for (var j = 0; j < all.length; j++) all[j].className = (j === cur - 1) ? 'on' : '';
+  }
+  prev.addEventListener('click', function(){ show(cur - 1); });
+  next.addEventListener('click', function(){ show(cur + 1); });
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'ArrowLeft') show(cur - 1);
+    if (e.key === 'ArrowRight') show(cur + 1);
+  });
+  show(1);
+</script>
+</body>
+</html>
